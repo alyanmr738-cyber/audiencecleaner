@@ -77,8 +77,13 @@ def get_primary_phone(row):
 
 def get_primary_email(row):
     """Get primary email from BUSINESS_EMAIL or first from PERSONAL_EMAILS."""
+    # Try BUSINESS_EMAIL first
     if row.get('BUSINESS_EMAIL') and row['BUSINESS_EMAIL'].strip():
-        return row['BUSINESS_EMAIL'].strip()
+        business_email = row['BUSINESS_EMAIL'].strip()
+        # Extract first email if it contains multiple emails
+        return extract_first_email(business_email)
+    
+    # Try PERSONAL_EMAILS
     if row.get('PERSONAL_EMAILS'):
         email = extract_first_email(row['PERSONAL_EMAILS'])
         if email:
